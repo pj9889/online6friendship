@@ -11,9 +11,10 @@
     <meta property="og:image" content="fbxx1.webp">
     <meta property="og:type" content="website">
     
-    <!-- Preload Assets for Superfast Loading -->
+    <!-- Preload Assets for Instant Loading -->
     <link rel="preload" as="image" href="fbxx1.webp">
     <link rel="preload" as="image" href="rxx1.webp">
+    <link rel="preload" as="audio" href="rx1.mp3">
 
     <style>
         /* CSS Reset & Optimization */
@@ -50,24 +51,38 @@
             padding-bottom: 40px; /* ডিসপ্লের নিচ থেকে হাফ ইঞ্চি উপরে */
         }
 
+        /* Instruction Text above Audio Box */
+        .audio-instruction {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 0.5px;
+            animation: textGlow 1.5s infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { opacity: 0.7; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); text-shadow: 0 0 8px rgba(0, 132, 255, 0.8); }
+        }
+
         /* Messenger Audio Player Style */
         .audio-container {
             width: 85%;
             max-width: 320px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
             padding: 8px 12px;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            
-            /* শাইনিং এবং পপআপ অ্যানিমেশন */
-            animation: audioPopShine 3s infinite ease-in-out;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            animation: audioPop 4s infinite ease-in-out;
         }
 
         /* Profile Picture (Round) */
@@ -79,10 +94,10 @@
             border: 2px solid #0084FF;
         }
 
-        /* Play/Pause Button */
+        /* Play/Pause Button with Movement Animation */
         .play-btn {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #0084FF;
             display: flex;
@@ -91,12 +106,30 @@
             cursor: pointer;
             border: none;
             outline: none;
+            box-shadow: 0 0 10px rgba(0, 132, 255, 0.6);
+            transition: transform 0.1s ease;
+            
+            /* অনবরত নড়াচড়া করবে যাতে ভিজিটর বুঝতে পারে এখানে ক্লিক করতে হবে */
+            animation: btnMovement 1.2s infinite ease-in-out;
+        }
+
+        /* ক্লিকের মুভমেন্ট ইফেক্ট */
+        .play-btn:active {
+            transform: scale(0.85) !important;
+            background: #0066cc;
         }
 
         .play-btn svg {
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             fill: #fff;
+        }
+
+        /* প্লে বাটনের কন্টিনিউয়াস মুভমেন্ট অ্যানিমেশন */
+        @keyframes btnMovement {
+            0% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 132, 255, 0.6); }
+            50% { transform: scale(1.12); box-shadow: 0 0 18px rgba(0, 132, 255, 0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 132, 255, 0.6); }
         }
 
         /* Fake Messenger Waveform */
@@ -113,7 +146,6 @@
             height: 100%;
             background: rgba(255, 255, 255, 0.4);
             border-radius: 2px;
-            transition: background 0.3s;
         }
 
         .audio-container.playing .wave-bar {
@@ -121,25 +153,20 @@
             animation: waveMotion 1.2s infinite ease-in-out;
         }
 
-        /* Waveform Animation Details */
         .wave-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
         .wave-bar:nth-child(2) { height: 75%; animation-delay: 0.3s; }
         .wave-bar:nth-child(3) { height: 50%; animation-delay: 0.5s; }
         .wave-bar:nth-child(4) { height: 90%; animation-delay: 0.2s; }
         .wave-bar:nth-child(5) { height: 60%; animation-delay: 0.4s; }
 
-        /* Audio Pop & Shine Animation */
-        @keyframes audioPopShine {
-            0% { transform: scale(1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
-            45% { transform: scale(1.03); box-shadow: 0 12px 40px rgba(0, 132, 255, 0.4); background: rgba(255, 255, 255, 0.25); }
-            50% { transform: scale(1.03); }
-            55% { transform: scale(1.03); }
-            100% { transform: scale(1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+        @keyframes audioPop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); background: rgba(255, 255, 255, 0.22); }
         }
 
         @keyframes waveMotion {
             0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.4); }
+            50% { transform: scaleY(0.3); }
         }
 
         /* Premium Sign-up Button Style */
@@ -159,8 +186,11 @@
             justify-content: center;
             box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4);
             letter-spacing: 0.5px;
-            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
             animation: pulseGlow 2s infinite ease-in-out;
+            transition: transform 0.1s ease;
         }
 
         @keyframes pulseGlow {
@@ -169,7 +199,7 @@
             100% { transform: scale(1); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4); }
         }
 
-        /* Click Effect */
+        /* Sign up Button Click Effect */
         .signup-btn:active {
             transform: scale(0.95) !important;
             box-shadow: 0 4px 10px rgba(255, 75, 43, 0.3);
@@ -178,18 +208,21 @@
 </head>
 <body>
 
-    <!-- Hidden Audio Element -->
-    <audio id="messengerAudio" src="rx1.mp3" preload="auto"></audio> <!-- অডিও ফাইলের নাম rx1.mp3 বা rx1.ogg দিতে পারেন -->
+    <!-- Hidden Audio Element with forced preloading -->
+    <audio id="messengerAudio" src="rx1.mp3" preload="auto"></audio>
 
     <div class="landing-container">
         
+        <!-- English Instruction Text -->
+        <div class="audio-instruction">🎵 Tap to play the voice message</div>
+
         <!-- Messenger Audio Player -->
         <div class="audio-container" id="audioBox">
-            <img src="rxx1.webp" alt="Profile" class="profile-pic"> <!-- প্রোফাইল পিকচার rxx1.webp -->
+            <img src="rxx1.webp" alt="Profile" class="profile-pic">
             <button class="play-btn" id="playBtn">
                 <!-- Play Icon -->
                 <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <!-- Pause Icon (Hidden by default) -->
+                <!-- Pause Icon -->
                 <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
             <div class="audio-wave">
@@ -202,47 +235,51 @@
         </div>
 
         <!-- Premium Affiliate Sign-up Button -->
-        <a href="https://paysale.g2afse.com/sl?id=6707ff5cbb23f2139d89e9bf&pid=125904" class="signup-btn" id="subBtn">
+        <button class="signup-btn" id="subBtn">
             🔥Sign-up Now🔥
-        </a>
+        </button>
     </div>
 
     <script>
         const targetUrl = "https://paysale.g2afse.com/sl?id=6707ff5cbb23f2139d89e9bf&pid=125904";
 
-        // ১. ফেসবুক ইন-অ্যাপ ব্রাউজার ব্লকার (ইউজারকে ক্রোম বা এক্সটার্নাল ব্রাউজারে পুশ করবে)
-        function forceExternalBrowser() {
+        // ১. ক্রোম ব্রাউজার প্রটেকশন হ্যান্ডলার (শুধু ক্রোমে লিংক ওপেন করানোর ট্রিকস)
+        function openInChrome(url) {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            const isFacebook = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+            const isAndroid = /Android/i.test(ua);
             
-            if (isFacebook) {
-                // অ্যান্ড্রয়েডের জন্য সরাসরি ক্রোম বা ডিফল্ট ব্রাউজারে ওপেন করার ট্রিকস
-                if (ua.indexOf("Android") > -1) {
-                    const chromeUrl = "intent://" + window.location.href.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
-                    window.location.href = chromeUrl;
-                } else {
-                    // iOS বা অন্যান্য ক্ষেত্রে ডাউনলোডের মতো বা সরাসরি ব্রাউজার ওপেন করার চেষ্টা
-                    window.location.href = targetUrl;
-                }
+            if (isAndroid) {
+                // অ্যান্ড্রয়েডে সরাসরি ক্রোম অ্যাপে লিংক ফোর্স করার চমৎকার ইন্টেন্ট ট্রিকস
+                const chromeIntent = "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
+                window.location.href = chromeIntent;
+            } else {
+                // iOS বা অন্যান্য ডিভাইসের ক্ষেত্রে নরমাল রিডাইরেক্ট
+                window.location.href = url;
             }
         }
-        // পেজ লোড হওয়া মাত্রই রান হবে
-        forceExternalBrowser();
 
-        // ২. বাটন ক্লিক এবং হ্যাপটিক ভাইব্রেশন হ্যান্ডলার
+        // সাইন আপ বাটন ক্লিক ইভেন্ট
         const subBtn = document.getElementById('subBtn');
-        subBtn.addEventListener('click', function(e) {
+        subBtn.addEventListener('click', function() {
+            // ক্লিকের বাস্তব অনুভূতির জন্য মোবাইল ভাইব্রেশন
             if (navigator.vibrate) {
                 navigator.vibrate(15); 
             }
+            // ক্রোম ব্রাউজারে লিংক ওপেন করার ফাংশন কল
+            openInChrome(targetUrl);
         });
 
-        // ৩. অডিও প্লেয়ার কন্ট্রোল (মেসেঞ্জার স্টাইল)
+        // ২. ইনস্ট্যান্ট অ디오 প্লেয়ার কন্ট্রোল
         const audio = document.getElementById('messengerAudio');
         const playBtn = document.getElementById('playBtn');
         const audioBox = document.getElementById('audioBox');
         const playIcon = document.getElementById('playIcon');
         const pauseIcon = document.getElementById('pauseIcon');
+
+        // পেজ লোড হওয়া মাত্রই অ디오 লোড নিশ্চিত করা
+        window.addEventListener('DOMContentLoaded', () => {
+            audio.load();
+        });
 
         playBtn.addEventListener('click', function() {
             if (audio.paused) {
@@ -250,19 +287,22 @@
                 audioBox.classList.add('playing');
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
+                playBtn.style.animation = 'none'; // প্লে হওয়া অবস্থায় বাটন নড়াচড়া বন্ধ থাকবে
             } else {
                 audio.pause();
                 audioBox.classList.remove('playing');
                 playIcon.style.display = 'block';
                 pauseIcon.style.display = 'none';
+                playBtn.style.animation = 'btnMovement 1.2s infinite ease-in-out'; // পজ করলে আবার নড়বে
             }
         });
 
-        // অডিও শেষ হয়ে গেলে আবার নরমাল মুডে ফিরে আসবে
+        // অডিও শেষ হয়ে গেলে আবার পূর্বের অবস্থায় ফিরে যাবে
         audio.addEventListener('ended', function() {
             audioBox.classList.remove('playing');
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
+            playBtn.style.animation = 'btnMovement 1.2s infinite ease-in-out';
         });
     </script>
 </body>
