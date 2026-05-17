@@ -46,9 +46,9 @@
             background-size: cover;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* অ্যাড উপরে এবং কন্টেন্ট নিচে রাখার জন্য */
+            justify-content: space-between;
             align-items: center;
-            padding-bottom: 40px; /* ডিসপ্লের নিচ থেকে হাফ ইঞ্চি উপরে বাটন থাকবে */
+            padding-bottom: 30px; /* নিচ থেকে বাটনগুলোর সঠিক দূরত্বের জন্য */
         }
 
         /* Top Ad Styling (For Maximum Earning) */
@@ -57,16 +57,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-top: 10px; /* স্ক্রিনের সামান্য নিচে নামানোর জন্য */
+            padding-top: 10px;
             z-index: 100;
         }
 
-        /* Bottom Content Wrapper (Audio + Button) */
+        /* Bottom Content Wrapper (Audio + Dual Buttons) */
         .bottom-content-box {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 0 15px;
         }
 
         /* Instruction Text above Audio Box */
@@ -95,7 +96,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
             padding: 8px 12px;
-            margin-bottom: 18px;
+            margin-bottom: 20px; /* বাটন থেকে কিছুটা গ্যাপ রাখার জন্য */
             display: flex;
             align-items: center;
             gap: 12px;
@@ -129,7 +130,6 @@
             animation: btnMovement 1.2s infinite ease-in-out;
         }
 
-        /* ক্লিকের মুভমেন্ট ইফেক্ট */
         .play-btn:active {
             transform: scale(0.85) !important;
             background: #0066cc;
@@ -141,7 +141,6 @@
             fill: #fff;
         }
 
-        /* প্লে বাটনের কন্টিনিউয়াস মুভমেন্ট অ্যানিমেশন */
         @keyframes btnMovement {
             0% { transform: scale(1); box-shadow: 0 0 8px rgba(0, 132, 255, 0.6); }
             50% { transform: scale(1.12); box-shadow: 0 0 18px rgba(0, 132, 255, 0.9); }
@@ -185,14 +184,13 @@
             50% { transform: scaleY(0.3); }
         }
 
-        /* Premium Sign-up Button Style */
-        .signup-btn {
-            width: 85%;
-            max-width: 320px;
-            padding: 14px 20px;
-            background: linear-gradient(135deg, #FF416C, #FF4B2B);
+        /* Common Button Styling (Pop-up & Blazing Effect) */
+        .action-btn {
+            width: 90%;
+            max-width: 340px;
+            padding: 13px 20px;
             color: #ffffff;
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             text-align: center;
             text-decoration: none;
@@ -200,25 +198,60 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4);
+            gap: 10px;
+            margin-bottom: 12px;
             letter-spacing: 0.5px;
             cursor: pointer;
             border: none;
             outline: none;
-            animation: pulseGlow 2s infinite ease-in-out;
             transition: transform 0.1s ease;
         }
 
-        @keyframes pulseGlow {
-            0% { transform: scale(1); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4); }
-            50% { transform: scale(1.03); box-shadow: 0 12px 30px rgba(255, 75, 43, 0.6); }
-            100% { transform: scale(1); box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4); }
+        /* Facebook Button Styles (Blue Blazing) */
+        .fb-btn {
+            background: linear-gradient(135deg, #1877F2, #0056b3);
+            box-shadow: 0 0 15px rgba(24, 119, 242, 0.6);
+            animation: popupBlazeFb 2.5s infinite ease-in-out;
         }
 
-        /* Sign up Button Click Effect */
-        .signup-btn:active {
+        /* Chrome Button Styles (Multi-Color Blazing) */
+        .chrome-btn {
+            background: linear-gradient(135deg, #ffcc00, #db4437, #0f9d58);
+            background-size: 200% 200%;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+            animation: popupBlazeChrome 2.5s infinite ease-in-out, gradientShift 4s infinite linear;
+        }
+
+        /* SVG Logos Styling */
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        /* Animations for Facebook Button (Pop & Blaze) */
+        @keyframes popupBlazeFb {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(24, 119, 242, 0.5); }
+            50% { transform: scale(1.04); box-shadow: 0 0 25px rgba(24, 119, 242, 0.9), 0 0 10px #fff; }
+        }
+
+        /* Animations for Chrome Button (Pop & Blaze) */
+        @keyframes popupBlazeChrome {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(255, 204, 0, 0.5); }
+            50% { transform: scale(1.04); box-shadow: 0 0 25px rgba(255, 204, 0, 0.9), 0 0 10px #fff; }
+        }
+
+        /* Background gradient move for chrome button */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Click/Active State Effect */
+        .action-btn:active {
             transform: scale(0.95) !important;
-            box-shadow: 0 4px 10px rgba(255, 75, 43, 0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5) !important;
         }
     </style>
 </head>
@@ -267,49 +300,75 @@
                 </div>
             </div>
 
-            <!-- Premium Affiliate Sign-up Button -->
-            <button class="signup-btn" id="subBtn">
-                🔥Sign-up Now🔥
+            <!-- Facebook Browser Button -->
+            <button class="action-btn fb-btn" id="fbBrowserBtn">
+                <!-- Facebook Icon -->
+                <svg viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Open With Facebook Browser
+            </button>
+
+            <!-- Chrome Browser Button -->
+            <button class="action-btn chrome-btn" id="chromeBrowserBtn">
+                <!-- Chrome Icon -->
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 3.84c1.824 0 3.456.672 4.752 1.776l-4.752 4.752H5.568C6.672 6.432 9.12 3.84 12 3.84zm-6.24 8.16c0-.96.24-1.872.672-2.688l4.128 7.152a6.204 6.204 0 0 1-4.8-4.464zm12.48 4.464c-1.104 1.728-3.024 2.88-5.232 2.88-.336 0-.672-.048-.96-.096l4.128-7.152h4.128c-.24 1.728-1.056 3.264-2.064 4.368zM12 7.68c2.376 0 4.32 1.944 4.32 4.32S14.376 16.32 12 16.32 7.68 14.376 7.68 12 9.624 7.68 12 7.68z"/>
+                </svg>
+                Open With Chrome Browser
             </button>
         </div>
 
     </div>
 
     <script>
+        // এই পেজের নির্দিষ্ট অ্যাফিলিয়েট টার্গেট লিংক
         const targetUrl = "https://paysale.g2afse.com/sl?id=6707ff5cbb23f2139d89e9bf&pid=125904";
 
-        // ক্রোম ব্রাউজার প্রটেকশন হ্যান্ডলার (শুধু ক্রোমে লিংক ওপেন করানোর ট্রিক)
-        function openInChrome(url) {
+        // ফেসবুক ইন-অ্যাপ ব্রাউজার ব্লক করে সরাসরি ক্রোম ব্রাউজারে লিংক ওপেন করানোর স্পেশাল ট্রিক
+        function forceOpenInChrome(url) {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isAndroid = /Android/i.test(ua);
             
             if (isAndroid) {
-                // অ্যান্ড্রয়েডে সরাসরি ক্রোম অ্যাপে লিংক ফোর্স করার ইন্টেন্ট ট্রিকস
+                // অ্যান্ড্রয়েডে সরাসরি ক্রোম অ্যাপ ওপেন করার ইন্টেন্ট প্রোটোকল
                 const chromeIntent = "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
                 window.location.href = chromeIntent;
             } else {
-                // iOS বা অন্যান্য ডিভাইসের ক্ষেত্রে নরমাল রিডাইরেক্ট
+                // iOS বা অন্যান্য ডিভাইসের ক্ষেত্রে উইন্ডো রিডাইরেকশন
                 window.location.href = url;
             }
         }
 
-        // সাইন আপ বাটন ক্লিক ইভেন্ট
-        const subBtn = document.getElementById('subBtn');
-        subBtn.addEventListener('click', function() {
+        // হ্যাপটিক ভাইব্রেশন হ্যান্ডলার
+        function triggerVibration() {
             if (navigator.vibrate) {
                 navigator.vibrate(15); 
             }
-            openInChrome(targetUrl);
+        }
+
+        // ১. ফেসবুক ব্রাউজার বাটন ক্লিক ইভেন্ট
+        const fbBtn = document.getElementById('fbBrowserBtn');
+        fbBtn.addEventListener('click', function() {
+            triggerVibration();
+            window.location.href = targetUrl;
         });
 
-        // ইনস্ট্যান্ট অডিও প্লেয়ার কন্ট্রোল
+        // ২. ক্রোম ব্রাউজার বাটন ক্লিক ইভেন্ট
+        const chromeBtn = document.getElementById('chromeBrowserBtn');
+        chromeBtn.addEventListener('click', function() {
+            triggerVibration();
+            forceOpenInChrome(targetUrl);
+        });
+
+        // ================= অডিও প্লেয়ার কন্ট্রোল সিস্টেম =================
         const audio = document.getElementById('messengerAudio');
         const playBtn = document.getElementById('playBtn');
         const audioBox = document.getElementById('audioBox');
         const playIcon = document.getElementById('playIcon');
         const pauseIcon = document.getElementById('pauseIcon');
 
-        // পেজ লোড হওয়া মাত্রই অডিও লোড নিশ্চিত করা
+        // পেজ লোড হওয়া মাত্রই ব্যাকগ্রাউন্ডে অডিও প্রস্তুত করা
         window.addEventListener('DOMContentLoaded', () => {
             audio.load();
         });
@@ -330,7 +389,7 @@
             }
         });
 
-        // অডিও শেষ হয়ে গেলে আবার পূর্বের অবস্থায় ফিরে যাবে
+        // অডিও শেষ হয়ে গেলে পুনরায় স্বাভাবিক মুডে ফিরে যাওয়া
         audio.addEventListener('ended', function() {
             audioBox.classList.remove('playing');
             playIcon.style.display = 'block';
