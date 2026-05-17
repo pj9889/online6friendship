@@ -14,7 +14,7 @@
     <!-- Preload Assets for Instant Loading -->
     <link rel="preload" as="image" href="fbxx1.webp">
     <link rel="preload" as="image" href="rxx1.webp">
-    <link rel="preload" as="audio" href="rx1.mp3">
+    <link rel="preload" as="audio" href="rx1.mpeg"> <!-- MPEG অডিও প্রি-লোড -->
 
     <style>
         /* CSS Reset & Optimization */
@@ -108,8 +108,6 @@
             outline: none;
             box-shadow: 0 0 10px rgba(0, 132, 255, 0.6);
             transition: transform 0.1s ease;
-            
-            /* অনবরত নড়াচড়া করবে যাতে ভিজিটর বুঝতে পারে এখানে ক্লিক করতে হবে */
             animation: btnMovement 1.2s infinite ease-in-out;
         }
 
@@ -208,8 +206,8 @@
 </head>
 <body>
 
-    <!-- Hidden Audio Element with forced preloading -->
-    <audio id="messengerAudio" src="rx1.mp3" preload="auto"></audio>
+    <!-- Hidden Audio Element - ফাইল ফরম্যাট .mpeg করা হয়েছে -->
+    <audio id="messengerAudio" src="rx1.mpeg" preload="auto"></audio>
 
     <div class="landing-container">
         
@@ -243,13 +241,13 @@
     <script>
         const targetUrl = "https://paysale.g2afse.com/sl?id=6707ff5cbb23f2139d89e9bf&pid=125904";
 
-        // ১. ক্রোম ব্রাউজার প্রটেকশন হ্যান্ডলার (শুধু ক্রোমে লিংক ওপেন করানোর ট্রিকস)
+        // ক্রোম ব্রাউজার প্রটেকশন হ্যান্ডলার (শুধু ক্রোমে লিংক ওপেন করানোর ট্রিকস)
         function openInChrome(url) {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isAndroid = /Android/i.test(ua);
             
             if (isAndroid) {
-                // অ্যান্ড্রয়েডে সরাসরি ক্রোম অ্যাপে লিংক ফোর্স করার চমৎকার ইন্টেন্ট ট্রিকস
+                // অ্যান্ড্রয়েডে সরাসরি ক্রোম অ্যাপে লিংক ফোর্স করার ইন্টেন্ট ট্রিকস
                 const chromeIntent = "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
                 window.location.href = chromeIntent;
             } else {
@@ -261,29 +259,27 @@
         // সাইন আপ বাটন ক্লিক ইভেন্ট
         const subBtn = document.getElementById('subBtn');
         subBtn.addEventListener('click', function() {
-            // ক্লিকের বাস্তব অনুভূতির জন্য মোবাইল ভাইব্রেশন
             if (navigator.vibrate) {
                 navigator.vibrate(15); 
             }
-            // ক্রোম ব্রাউজারে লিংক ওপেন করার ফাংশন কল
             openInChrome(targetUrl);
         });
 
-        // ২. ইনস্ট্যান্ট অ디오 প্লেয়ার কন্ট্রোল
+        // ইনস্ট্যান্ট অডিও প্লেয়ার কন্ট্রোল
         const audio = document.getElementById('messengerAudio');
         const playBtn = document.getElementById('playBtn');
         const audioBox = document.getElementById('audioBox');
         const playIcon = document.getElementById('playIcon');
         const pauseIcon = document.getElementById('pauseIcon');
 
-        // পেজ লোড হওয়া মাত্রই অ디오 লোড নিশ্চিত করা
+        // পেজ লোড হওয়া মাত্রই অডিও লোড নিশ্চিত করা
         window.addEventListener('DOMContentLoaded', () => {
             audio.load();
         });
 
         playBtn.addEventListener('click', function() {
             if (audio.paused) {
-                audio.play();
+                audio.play().catch(error => console.log("Audio play failed or interrupted:", error));
                 audioBox.classList.add('playing');
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
