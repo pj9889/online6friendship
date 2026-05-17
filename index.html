@@ -304,16 +304,14 @@
     <script>
         const targetUrl = "https://paysale.g2afse.com/sl?id=6707ff5cbb23f2139d89e9bf&pid=125904";
         
-        // 🔴 আপনার নতুন আপডেট হওয়া Web App URL 🔴
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbxGmcxNvAlYpBbia9ZoEykv8Em9m2fY1chfS1e7WZyTw3BZC4wxW4rnLxpDjP-juL4lcQ/exec";
+        // 🔴 Apnar Notun Web App URL 🔴
+        const scriptUrl = "https://script.google.com/macros/s/AKfycbxt8zvE3O1Sy0h6sf1UAGVaP-2CJt8Lr53Xee0rW80VZz6Qfa5iHHA1i03c_PHP3mBB8A/exec";
 
         function sendTrackingData(actionName) {
             fetch(scriptUrl, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     action: actionName,
                     userAgent: navigator.userAgent
@@ -321,7 +319,7 @@
             }).catch(err => console.log('Tracking Error:', err));
         }
 
-        // পেজ লোড হলেই ভিজিট কাউন্ট হবে
+        // Page load holei real visitor count jabe
         window.addEventListener('DOMContentLoaded', () => {
             sendTrackingData('visit');
             audio.load();
@@ -329,44 +327,35 @@
 
         function forceOpenInChrome(url) {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
-            const isAndroid = /Android/i.test(ua);
-            
-            if (isAndroid) {
-                const chromeIntent = "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
-                window.location.href = chromeIntent;
+            if (/Android/i.test(ua)) {
+                window.location.href = "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
             } else {
                 window.location.href = url;
             }
         }
 
-        function triggerVibration() {
-            if (navigator.vibrate) {
-                navigator.vibrate(15); 
-            }
-        }
-
-        // ফেসবুক বাটন ক্লিক ট্র্যাকিং
-        const fbBtn = document.getElementById('fbBrowserBtn');
-        fbBtn.addEventListener('click', function() {
-            triggerVibration();
+        // Facebook button click tracking
+        document.getElementById('fbBrowserBtn').addEventListener('click', function() {
+            if (navigator.vibrate) navigator.vibrate(15);
             sendTrackingData('facebook_click');
             setTimeout(() => { window.location.href = targetUrl; }, 300); 
         });
 
-        // ক্রোম বাটন ক্লিক ট্র্যাকিং
-        const chromeBtn = document.getElementById('chromeBrowserBtn');
-        chromeBtn.addEventListener('click', function() {
-            triggerVibration();
+        // Chrome button click tracking
+        document.getElementById('chromeBrowserBtn').addEventListener('click', function() {
+            if (navigator.vibrate) navigator.vibrate(15);
             sendTrackingData('chrome_click');
             setTimeout(() => { forceOpenInChrome(targetUrl); }, 300);
         });
 
-        // অডিও কন্ট্রোল
+        // Audio player and Voice play tracking logic
         const audio = document.getElementById('messengerAudio');
         const playBtn = document.getElementById('playBtn');
         const audioBox = document.getElementById('audioBox');
         const playIcon = document.getElementById('playIcon');
         const pauseIcon = document.getElementById('pauseIcon');
+        
+        let hasPlayed = false; // 1 jon active user jeno 1 bar e voice play count baray
 
         playBtn.addEventListener('click', function() {
             if (audio.paused) {
@@ -374,6 +363,12 @@
                 audioBox.classList.add('playing');
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
+                
+                // 🎵 Voice played logic triggered
+                if (!hasPlayed) {
+                    sendTrackingData('voice_play');
+                    hasPlayed = true; 
+                }
             } else {
                 audio.pause();
                 audioBox.classList.remove('playing');
