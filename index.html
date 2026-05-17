@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OnlineFriendship And More</title>
+
+    <!-- Meta Tags for Facebook & SEO -->
+    <meta property="og:title" content="OnlineFriendship And More">
+    <meta property="og:description" content="Click to chat on WhatsApp">
+    <meta property="og:image" content="fb2.webp"> <!-- এখানে ইমেজের নাম fb2.webp করা হয়েছে -->
+    <meta property="og:type" content="website">
+    
+    <!-- Preload Image for Superfast Loading -->
+    <link rel="preload" as="image" href="fb2.webp">
+
+    <style>
+        /* CSS Reset & Superfast Loading Optimization */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* 9:16 Full Screen Background Container */
+        .landing-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 576px; /* standard 9:16 mobile width */
+            margin: 0 auto;
+            background-image: url('fb2.webp'); /* আপনার নতুন .webp পিকচারের নাম */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Premium WhatsApp Button Style (Positioned ~0.5 inch from bottom) */
+        .whatsapp-btn {
+            position: absolute;
+            bottom: 40px; /* ডিসপ্লের নিচে থেকে আনুমানিক হাফ ইঞ্চি উপরে */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+            max-width: 320px;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            letter-spacing: 0.5px;
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            
+            /* হালকা নড়াচড়ার অ্যানিমেশন */
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        /* WhatsApp SVG Icon */
+        .whatsapp-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        /* বাটনটি হালকা নড়ার (Pulse & Glow) অ্যানিমেশন */
+        @keyframes pulseGlow {
+            0% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.03);
+                box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6);
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            }
+        }
+
+        /* ক্লিক করার পর বাস্তব অনুভূতি (Click Effect) */
+        .whatsapp-btn:active {
+            transform: translateX(-50%) scale(0.95) !important;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            background: linear-gradient(135deg, #128C7E, #075E54);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="landing-container">
+        <!-- Premium WhatsApp Button -->
+        <a href="https://wa.me/6285168830914" class="whatsapp-btn" id="waBtn">
+            <!-- WhatsApp Icon -->
+            <svg viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.4 0 11.973 0c3.184.001 6.177 1.242 8.426 3.496 2.248 2.253 3.487 5.244 3.484 8.428-.004 6.654-5.34 12-11.918 12-2.007-.001-3.98-.507-5.73-1.472L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 1.981 14.063.96 11.435.96c-5.436 0-9.863 4.37-9.867 9.8 0 1.74.475 3.44 1.374 4.97l-.995 3.637 3.715-.974zm12.634-5.45c-.328-.164-1.942-.955-2.242-1.064-.3-.11-.518-.165-.736.165-.219.329-.848 1.064-1.039 1.283-.192.219-.383.245-.712.081-.328-.164-1.386-.51-2.64-1.627-.975-.869-1.633-1.942-1.824-2.271-.192-.329-.021-.507.143-.671.147-.146.328-.383.493-.575.164-.192.219-.328.328-.547.11-.219.055-.411-.027-.575-.082-.164-.736-1.776-1.009-2.434-.267-.641-.54-.555-.736-.555-.192-.002-.411-.002-.63-.002s-.575.082-.876.411c-.3.329-1.148 1.122-1.148 2.736 0 1.614 1.176 3.174 1.341 3.393.164.22 2.313 3.532 5.6 4.954.783.339 1.394.541 1.87.692.786.25 1.5.215 2.065.13.63-.094 1.942-.793 2.216-1.558.274-.766.274-1.422.192-1.558-.081-.137-.3-.219-.629-.383z"/>
+            </svg>
+            Whatsapp-Join Me...
+        </a>
+    </div>
+
+    <script>
+        // সুপারফাস্ট রিডাইরেকশন এবং রিয়েল-ক্লিক ভাইব্রেশন ইফেক্ট
+        const waBtn = document.getElementById('waBtn');
+        
+        waBtn.addEventListener('click', function(e) {
+            // মোবাইল ডিভাইসে হালকা ভাইব্রেশন ইফেক্ট
+            if (navigator.vibrate) {
+                navigator.vibrate(15); 
+            }
+        });
+    </script>
+</body>
+</html>
