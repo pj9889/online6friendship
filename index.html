@@ -3,59 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Nearby Matches</title>
+    <title>Locanto For Meetup</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; }
-        .hidden { display: none; }
-        .card { border: 1px solid #ccc; padding: 20px; border-radius: 10px; max-width: 300px; margin: auto; }
-        button { padding: 10px 20px; cursor: pointer; background: #ff4081; color: white; border: none; border-radius: 5px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #000;
+        }
+
+        /* অনবরত পরিবর্তন হওয়া ব্যাকগ্রাউন্ড স্লাইডার */
+        .bg-slider {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .bg-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .bg-slide.active {
+            opacity: 0.4; /* ছবি পরিষ্কার দেখার সুবিধার্থে অপাসিটি ০.৪ রাখা হয়েছে */
+        }
+
+        /* মূল কন্টেইনার */
+        .wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .card {
+            background: rgba(15, 15, 25, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 480px;
+            padding: 30px 20px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-box {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+            object-fit: contain;
+        }
+
+        /* টাইপোগ্রাফি এবং টেক্সট স্টাইল */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .text-title {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #f1f5f9;
+        }
+
+        .highlight-age {
+            color: #ff3366;
+            font-weight: bold;
+            font-size: 20px;
+            display: block;
+            margin-top: 15px;
+            text-shadow: 0 0 10px rgba(255,51,102,0.3);
+        }
+
+        /* বাটন ইন্টারফেস */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* বিভিন্ন কালারের বাটন সেট */
+        .btn-yes-1 { background-color: #28a745; color: white; }
+        .btn-no-1 { background-color: #dc3545; color: white; }
+        
+        .btn-yes-2 { background-color: #007bff; color: white; }
+        .btn-no-2 { background-color: #ffc107; color: #000; }
+
+        /* কাঁপানো বাটন ইফেক্ট (Find Someone Near Me) */
+        .btn-shake {
+            background: linear-gradient(135deg, #ff3366, #ff5e62);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+            animation: lightShake 2s infinite;
+        }
+
+        @keyframes lightShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+            20%, 40%, 60%, 80% { transform: translateX(3px); }
+        }
+
+        /* বাফারিং স্ক্রিন */
+        #bufferingScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #09090e;
+            z-index: 10;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border-left-color: #00dbde;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* দ্বিতীয় পেজের সম্পূর্ণ আলাদা লেআউট */
+        #finalPage {
+            display: none;
+            position: relative;
+            z-index: 5;
+            min-height: 100vh;
+            background: radial-gradient(circle, #1a1025 0%, #05020a 100%);
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .powered-tag {
+            font-size: 11px;
+            color: #aaa;
+            text-align: right;
+            margin-top: -15px;
+            margin-bottom: 20px;
+            padding-right: 5px;
+        }
+
+        /* প্রোফাইল কার্ড এলিমেন্ট */
+        .profile-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 20px auto;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #00dbde;
+        }
+
+        .active-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 18px;
+            height: 18px;
+            background-color: #23d160;
+            border: 3px solid #0f0f13;
+            border-radius: 50%;
+        }
+
+        .profile-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .verified-badge {
+            color: #1d9bf0;
+            font-size: 18px;
+        }
+
+        .profile-details {
+            font-size: 15px;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* অ্যাফিলিয়েট পালসিং বাটন */
+        .btn-cpa {
+            display: block;
+            background: linear-gradient(135deg, #00dbde, #fc00ff);
+            color: white;
+            text-decoration: none;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0, 219, 222, 0.5);
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 219, 222, 0.5); }
+            100% { transform: scale(1.03); box-shadow: 0 0 25px rgba(252, 0, 255, 0.8); }
+        }
     </style>
 </head>
 <body>
 
-    <div id="step1">
-        <h1>আমাদের প্ল্যাটফর্মে স্বাগতম</h1>
-        <p>নির্দেশনা: নিয়মগুলো মেনে এগিয়ে যান।</p>
-        <button onclick="showLoading()">I Agree</button>
+    <!-- অনবরত ১ সেকেন্ড পর পর পরিবর্তন হওয়া ৫টি ছবির স্লাইডার ব্যাকগ্রাউন্ড -->
+    <div class="bg-slider" id="mainSlider">
+        <div class="bg-slide active" style="background-image: url('v1.webp');"></div>
+        <div class="bg-slide" style="background-image: url('v2.webp');"></div>
+        <div class="bg-slide" style="background-image: url('v3.webp');"></div>
+        <div class="bg-slide" style="background-image: url('v4.webp');"></div>
+        <div class="bg-slide" style="background-image: url('v5.webp');"></div>
     </div>
 
-    <div id="step2" class="hidden">
-        <h2>প্রসেসিং হচ্ছে...</h2>
-    </div>
-
-    <div id="step3" class="hidden">
-        <p>আপনার আশেপাশের সিঙ্গেল মহিলাদের খুঁজতে আপনার লোকেশন অন করা জরুরী।</p>
-        <button onclick="requestLocation()">OK</button>
-    </div>
-
-    <div id="step4" class="hidden">
+    <!-- প্রথম স্ক্রিনের কন্টেন্ট উইন্ডো -->
+    <div class="wrapper" id="pageWrapper">
         <div class="card">
-            <img src="https://via.placeholder.com/100" alt="Profile">
-            <h3>সাবিনা, ২৪ বছর</h3>
-            <p>আপনার থেকে মাত্র ১.২ কিমি দূরে</p>
-            <button>মেসেজ দিন</button>
+            <!-- প্রথম লোগো প্লেসমেন্ট -->
+            <div class="logo-box">
+                <img src="lgd1.webp" alt="Locanto Logo">
+            </div>
+
+            <!-- ধাপ ১ -->
+            <div id="step1" class="step-content active">
+                <p class="text-title">
+                    Welcome to Locanto For Meetup Website. An Official Locanto Website For Meetup. Our goal is to connect you with single, married, unmarried, or divorced women near your location.
+                </p>
+                <span class="highlight-age">Is your age over 18+?</span>
+                <div class="btn-group">
+                    <button class="btn btn-yes-1" onclick="nextStep(2)">Yes</button>
+                    <button class="btn btn-no-1" onclick="nextStep(2)">No</button>
+                </div>
+            </div>
+
+            <!-- ধাপ ২ -->
+            <div id="step2" class="step-content">
+                <p class="text-title">
+                    Every day, thousands of verified single women apply on this website for absolute sexual satisfaction. You will be connected with a single woman closest to your location. Do you give permission?
+                </p>
+                <div class="btn-group">
+                    <button class="btn btn-yes-2" onclick="nextStep(3)">Yes</button>
+                    <button class="btn btn-no-2" onclick="nextStep(3)">No</button>
+                </div>
+            </div>
+
+            <!-- ধাপ ৩ -->
+            <div id="step3" class="step-content">
+                <p class="text-title">
+                    You will be connected to a single woman near your location very soon. She might be someone you already know. Please do not leak our verified users' profiles or information. They wish to enjoy intimacy with full privacy.
+                </p>
+                <button class="btn-shake" onclick="triggerBuffering()">FIND SOMEONE NEAR ME</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ফেক বাফারিং এবং আলাদা লোগো স্ক্রিন -->
+    <div id="bufferingScreen">
+        <img src="gg1.webp" alt="Verification Logo" style="max-height: 50px; object-fit: contain;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- সম্পূর্ণ আলাদা ব্যাকগ্রাউন্ড বিশিষ্ট দ্বিতীয় ফাইনাল পেজ -->
+    <div id="finalPage">
+        <div class="card" style="background: rgba(20, 15, 30, 0.95); border-color: rgba(252, 0, 255, 0.2);">
+            <!-- দ্বিতীয় লোগো রিপ্লেসমেন্ট ঠিক একই জায়গায় -->
+            <div class="logo-box" style="margin-bottom: 5px;">
+                <img src="sf1.webp" alt="Secure Logo">
+            </div>
+            <div class="powered-tag">Powered by Locanto</div>
+
+            <!-- ম্যাটচিং ফলাফল বিবরণ -->
+            <p class="text-title" style="color: #00dbde; font-weight: bold; font-size: 16px;">
+                A single woman has been found near your location! She has requested private encounters and satisfaction.
+            </p>
+
+            <!-- প্রোফাইল কার্ড এরিয়া -->
+            <div class="profile-container">
+                <img src="dp.webp" alt="Alyssa Watson" class="profile-pic">
+                <div class="active-dot"></div>
+            </div>
+
+            <div class="profile-name">
+                Alyssa Watson <span class="verified-badge">✓</span>
+            </div>
+
+            <div class="profile-details">
+                Age: 37 <br>
+                Mobile: +6146827**** <!-- শেষ ৪ ডিজিট ঝাপসা/লুকানো -->
+            </div>
+
+            <p class="text-title" style="font-size: 15px; margin-bottom: 25px;">
+                Complete your free profile validation to start private live chatting instantly with Alyssa Watson.
+            </p>
+
+            <!-- পালসিং অ্যাকশন বাটন (অ্যাফিলিয়েট লিংক এখানে বসবে) -->
+            <a href="YOUR_AFFILIATE_LINK_HERE" class="btn-cpa">
+                Complete Your Profile
+            </a>
         </div>
     </div>
 
     <script>
-        function showLoading() {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('step2').classList.add('hidden');
-                document.getElementById('step3').classList.remove('hidden');
-            }, 2000);
+        // ১. অনবরত ব্যাকগ্রাউন্ড ইমেজ পরিবর্তন লজিক (১ সেকেন্ড পর পর)
+        const slides = document.querySelectorAll('.bg-slide');
+        let currentSlideIndex = 0;
+
+        function changeBackground() {
+            slides[currentSlideIndex].classList.remove('active');
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            slides[currentSlideIndex].classList.add('active');
+        }
+        setInterval(changeBackground, 1000);
+
+        // ২. বাটন ইন্টারঅ্যাকশন ফাংশন
+        function nextStep(stepNumber) {
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById('step' + stepNumber).classList.add('active');
         }
 
-        function requestLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(() => {
-                    document.getElementById('step3').classList.add('hidden');
-                    document.getElementById('step4').classList.remove('hidden');
-                }, () => {
-                    alert("লোকেশন পারমিশন পাওয়া যায়নি।");
-                });
-            }
+        // ৩. ফেক বাফারিং এবং পেজ রিপ্লেসমেন্ট লজিক (২ সেকেন্ড বাফারিং)
+        function triggerBuffering() {
+            document.getElementById('pageWrapper').style.display = 'none';
+            document.getElementById('mainSlider').style.display = 'none';
+            document.getElementById('bufferingScreen').style.display = 'flex';
+
+            setTimeout(() => {
+                document.getElementById('bufferingScreen').style.display = 'none';
+                document.getElementById('finalPage').style.display = 'flex';
+            }, 2000); // ২ সেকেন্ড কাউন্টডাউন
         }
     </script>
 </body>
